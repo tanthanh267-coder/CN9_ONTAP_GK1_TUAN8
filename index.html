@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập Giữa Kì 1 - Công Nghệ 9</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & React DOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel Standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // DATA SOURCE EXACTLY FROM THE PDF
+        const mcqData = [
+            {
+                id: 1,
+                lesson: "Bài 1",
+                question: "Tập hợp các công việc được xã hội công nhận, nhờ được đào tạo mà con người có năng lực, tri thức, kĩ năng để tạo ra sản phẩm và mang lại thu nhập ổn định được gọi là:",
+                options: [
+                    { id: "A", text: "Việc làm." },
+                    { id: "B", text: "Nghề nghiệp." },
+                    { id: "C", text: "Lao động thời vụ." },
+                    { id: "D", text: "Sở thích cá nhân." }
+                ],
+                correct: "B",
+                rationale: "Nghề nghiệp đòi hỏi quá trình đào tạo, tích lũy tri thức, kĩ năng để tạo ra sản phẩm và thu nhập ổn định lâu dài."
+            },
+            {
+                id: 2,
+                lesson: "Bài 1",
+                question: "Điểm khác biệt căn bản giữa 'Nghề nghiệp' và 'Việc làm' là gì?",
+                options: [
+                    { id: "A", text: "Nghề nghiệp không tạo ra thu nhập, còn việc làm luôn mang lại thu nhập rất cao." },
+                    { id: "B", text: "Việc làm đòi hỏi quá trình đào tạo lâu dài chuyên biệt, còn nghề nghiệp thì không." },
+                    { id: "C", text: "Nghề nghiệp có tính ổn định lâu dài, đòi hỏi đào tạo chuyên môn; còn việc làm là công việc cụ thể được giao và trả công." },
+                    { id: "D", text: "Nghề nghiệp chỉ tạo ra sản phẩm tinh thần, còn việc làm chỉ tạo ra sản phẩm vật chất." }
+                ],
+                correct: "C",
+                rationale: "Nghề nghiệp mang tính hệ thống và lâu dài qua đào tạo, trong khi việc làm có thể là một hoạt động cụ thể trong một khoảng thời gian nhất định."
+            },
+            {
+                id: 3,
+                lesson: "Bài 1",
+                question: "Đối tượng lao động chủ yếu của các ngành nghề thuộc lĩnh vực kĩ thuật, công nghệ là gì?",
+                options: [
+                    { id: "A", text: "Các quy định pháp luật và hồ sơ văn bản hành chính công." },
+                    { id: "B", text: "Vận dụng kiến thức Toán, Khoa học tự nhiên, Kĩ thuật để thiết kế, chế tạo, vận hành, bảo trì máy móc, phần mềm, hệ thống kĩ thuật." },
+                    { id: "C", text: "Các hiện tượng tâm lí, tình cảm và hành vi ứng xử của con người trong đời sống." },
+                    { id: "D", text: "Cây trồng, vật nuôi và các hệ sinh thái tự nhiên chưa qua chế biến." }
+                ],
+                correct: "B",
+                rationale: "Lĩnh vực kĩ thuật, công nghệ tập trung vào công cụ, máy móc, hệ thống kĩ thuật và quy trình công nghệ dựa trên khoa học tự nhiên."
+            },
+            {
+                id: 4,
+                lesson: "Bài 1",
+                question: "Ý thức tuân thủ các quy tắc an toàn lao động và bảo vệ môi trường thuộc nhóm yêu cầu nào đối với người lao động trong lĩnh vực kĩ thuật, công nghệ?",
+                options: [
+                    { id: "A", text: "Năng lực chuyên môn." },
+                    { id: "B", text: "Phẩm chất đạo đức và kỉ luật." },
+                    { id: "C", text: "Trình độ ngoại ngữ." },
+                    { id: "D", text: "Trình độ học vấn tối thiểu." }
+                ],
+                correct: "B",
+                rationale: "Tuân thủ quy tắc, ý thức an toàn và kỉ luật thuộc về nhóm phẩm chất đạo đức nghề nghiệp và thái độ làm việc."
+            },
+            {
+                id: 5,
+                lesson: "Bài 2",
+                question: "Khung cơ cấu hệ thống giáo dục quốc dân Việt Nam bao gồm hai thành phần chính nào?",
+                options: [
+                    { id: "A", text: "Giáo dục mầm non và giáo dục đại học." },
+                    { id: "B", text: "Giáo dục phổ thông và giáo dục nghề nghiệp." },
+                    { id: "C", text: "Giáo dục chính quy và giáo dục thường xuyên." },
+                    { id: "D", text: "Giáo dục công lập và giáo dục tư thục." }
+                ],
+                correct: "C",
+                rationale: "Hệ thống giáo dục quốc dân Việt Nam phân thành Giáo dục chính quy và Giáo dục thường xuyên."
+            },
+            {
+                id: 6,
+                lesson: "Bài 2",
+                question: "Theo Luật Giáo dục, giáo dục phổ thông Việt Nam có mấy thời điểm phân luồng chính?",
+                options: [
+                    { id: "A", text: "1 thời điểm (Sau khi tốt nghiệp THCS)." },
+                    { id: "B", text: "2 thời điểm (Sau khi tốt nghiệp THCS và sau khi tốt nghiệp THPT)." },
+                    { id: "C", text: "3 thời điểm (Sau Tiểu học, THCS và THPT)." },
+                    { id: "D", text: "4 thời điểm (Mầm non, Tiểu học, THCS và THPT)." }
+                ],
+                correct: "B",
+                rationale: "Hai mốc phân luồng quan trọng nhất trong giáo dục phổ thông là sau THCS (lớp 9) và sau THPT (lớp 12)."
+            },
+            {
+                id: 7,
+                lesson: "Bài 2",
+                question: "Thời gian đào tạo trình độ trung cấp đối với học sinh đã tốt nghiệp Trung học cơ sở là bao lâu?",
+                options: [
+                    { id: "A", text: "Từ 3 tháng đến dưới 1 năm." },
+                    { id: "B", text: "Từ 1 đến 2 năm." },
+                    { id: "C", text: "Từ 2 đến 3 năm." },
+                    { id: "D", text: "Từ 3 đến 5 năm." }
+                ],
+                correct: "C",
+                rationale: "Đối với người có bằng tốt nghiệp THCS, thời gian đào tạo trung cấp theo quy định là từ 2 đến 3 năm học."
+            },
+            {
+                id: 8,
+                lesson: "Bài 2",
+                question: "Mô hình đào tạo '9+' dành cho học sinh tốt nghiệp THCS được hiểu là:",
+                options: [
+                    { id: "A", text: "Vừa học chương trình giáo dục thường xuyên cấp THPT vừa học nghề trình độ trung cấp." },
+                    { id: "B", text: "Học sinh học xong lớp 9 được tuyển thẳng lên thẳng trình độ Đại học." },
+                    { id: "C", text: "Học sinh chỉ học nghề trình độ sơ cấp trong thời gian 9 tháng." },
+                    { id: "D", text: "Chương trình du học nghề dành cho học sinh sau khi học xong lớp 9." }
+                ],
+                correct: "A",
+                rationale: "Mô hình 9+ kết hợp song song giữa học văn hóa THPT (GDTX) và học nghề trung cấp giúp tiết kiệm thời gian."
+            },
+            {
+                id: 9,
+                lesson: "Bài 3",
+                question: "Trong thị trường lao động, đối tượng nào được coi là 'bên bán' và hàng hóa được trao đổi ở đây là gì?",
+                options: [
+                    { id: "A", text: "Người sử dụng lao động là bên bán; hàng hóa là máy móc, thiết bị sản xuất." },
+                    { id: "B", text: "Người lao động là bên bán; hàng hóa là sức lao động (bao gồm cả thể lực và trí lực)." },
+                    { id: "C", text: "Các cơ sở đào tạo là bên bán; hàng hóa là bằng cấp, chứng chỉ nghề." },
+                    { id: "D", text: "Nhà nước là bên bán; hàng hóa là chính sách hỗ trợ việc làm." }
+                ],
+                correct: "B",
+                rationale: "Người lao động bán sức lao động (kiến thức, kĩ năng, thời gian) cho người sử dụng lao động để nhận tiền lương."
+            },
+            {
+                id: 10,
+                lesson: "Bài 3",
+                question: "Yếu tố nào sau đây thúc đẩy sự chuyển dịch cơ cấu kinh tế, làm giảm cầu lao động chân tay và đòi hỏi người lao động phải nâng cao kĩ năng, tư duy sáng tạo?",
+                options: [
+                    { id: "A", text: "Nguồn cung lao động dồi dào." },
+                    { id: "B", text: "Sự phát triển của khoa học, công nghệ." },
+                    { id: "C", text: "Sự gia tăng dân số ở khu vực nông thôn." },
+                    { id: "D", text: "Bối cảnh gia đình người lao động." }
+                ],
+                correct: "B",
+                rationale: "Khoa học công nghệ và tự động hóa thay thế các công việc chân tay đơn giản, tạo ra cầu lao động trình độ cao."
+            },
+            {
+                id: 11,
+                lesson: "Bài 3",
+                question: "Thực trạng nào dưới đây phản ánh một trong những vấn đề cơ bản của thị trường lao động tại Việt Nam hiện nay?",
+                options: [
+                    { id: "A", text: "Chất lượng lao động đạt mức rất cao, đáp ứng đầy đủ yêu cầu của doanh nghiệp." },
+                    { id: "B", text: "Nguồn cung lao động nhỏ hơn rất nhiều so với nhu cầu tuyển dụng." },
+                    { id: "C", text: "Xu hướng Cung lao động lớn hơn Cầu lao động, đồng thời khan hiếm lao động có trình độ chuyên môn kĩ thuật cao." },
+                    { id: "D", text: "Lực lượng lao động phân bố chủ yếu và đồng đều tại các khu công nghiệp." }
+                ],
+                correct: "C",
+                rationale: "Việt Nam có lực lượng lao động dồi dào (Cung > Cầu tổng thể) nhưng lại thiếu hụt nhân lực tay nghề và kĩ thuật cao."
+            },
+            {
+                id: 12,
+                lesson: "Bài 3",
+                question: "Theo quy trình tìm kiếm thông tin thị trường lao động, việc đặt ra câu hỏi 'Mức lương trung bình của kĩ sư phần mềm hiện nay là bao nhiêu?' thuộc bước nào?",
+                options: [
+                    { id: "A", text: "Bước 1: Xác định mục tiêu tìm kiếm." },
+                    { id: "B", text: "Bước 2: Xác định nguồn thông tin." },
+                    { id: "C", text: "Bước 3: Xác định công cụ tìm kiếm." },
+                    { id: "D", text: "Bước 4: Tiến hành tìm kiếm và tổng hợp." }
+                ],
+                correct: "A",
+                rationale: "Đặt câu hỏi cụ thể về thông tin cần tìm là bước đầu tiên - Xác định mục tiêu tìm kiếm."
+            },
+            {
+                id: 13,
+                lesson: "Bài 4",
+                question: "Theo lí thuyết mật mã Holland (John Holland), môi trường nghề nghiệp và tính cách con người được chia thành mấy nhóm chính?",
+                options: [
+                    { id: "A", text: "4 nhóm." },
+                    { id: "B", text: "5 nhóm." },
+                    { id: "C", text: "6 nhóm." },
+                    { id: "D", text: "7 nhóm." }
+                ],
+                correct: "C",
+                rationale: "Mật mã Holland chia làm 6 nhóm: Kĩ thuật, Nghiên cứu, Nghệ thuật, Xã hội, Quản lí, Nghiệp vụ (RIASEC)."
+            },
+            {
+                id: 14,
+                lesson: "Bài 4",
+                question: "Trong mô hình 'Cây nghề nghiệp', yếu tố nào dưới đây thuộc phần 'gốc rễ'?",
+                options: [
+                    { id: "A", text: "Mức lương cao và thu nhập hấp dẫn." },
+                    { id: "B", text: "Cơ hội việc làm rộng mở." },
+                    { id: "C", text: "Khả năng (năng lực) và sở thích cá nhân." },
+                    { id: "D", text: "Công việc ổn định, vị thế xã hội." }
+                ],
+                correct: "C",
+                rationale: "Gốc rễ của cây nghề nghiệp bao gồm Sở thích, Khả năng, Cá tính và Giá trị nghề nghiệp."
+            },
+            {
+                id: 15,
+                lesson: "Bài 4",
+                question: "Quy trình lựa chọn nghề nghiệp gồm mấy bước cơ bản?",
+                options: [
+                    { id: "A", text: "2 bước." },
+                    { id: "B", text: "3 bước." },
+                    { id: "C", text: "4 bước." },
+                    { id: "D", text: "5 bước." }
+                ],
+                correct: "B",
+                rationale: "3 bước cơ bản: (1) Đánh giá bản thân, (2) Tìm hiểu thị trường lao động, (3) Ra quyết định lựa chọn nghề nghiệp."
+            },
+            {
+                id: 16,
+                lesson: "Bài 4",
+                question: "Học sinh A quyết định chọn ngành Công nghệ thông tin vì thấy tất cả các bạn trong nhóm chơi thân đều đăng kí ngành này, mặc dù bản thân không thích máy tính và tư duy toán học kém. Yếu tố nào đã tác động tiêu cực đến quyết định của A?",
+                options: [
+                    { id: "A", text: "Yếu tố nhà trường." },
+                    { id: "B", text: "Chạy theo phong trào của nhóm bạn." },
+                    { id: "C", text: "Yếu tố gia đình áp đặt." },
+                    { id: "D", text: "Đánh giá đúng năng lực bản thân." }
+                ],
+                correct: "B",
+                rationale: "Việc chọn nghề theo bạn bè mà bỏ qua năng lực và sở thích của bản thân là biểu hiện của tâm lí đám đông/phong trào."
+            }
+        ];
+
+        const tfData = [
+            {
+                id: 17,
+                lesson: "Bài 2",
+                title: "Câu 17: Hệ thống giáo dục quốc dân & Phân luồng sau THCS",
+                context: "Trong buổi sinh hoạt hướng nghiệp lớp 9, các bạn học sinh thảo luận về Hệ thống giáo dục quốc dân và các hướng đi sau khi tốt nghiệp THCS.",
+                items: [
+                    { key: "a", text: "Sau khi tốt nghiệp THCS, học sinh bắt buộc phải thi đỗ vào các trường THPT công lập mới có cơ hội làm việc trong lĩnh vực kĩ thuật, công nghệ.", correct: false, note: "Sai - Học sinh có thể theo học Trung cấp nghề hoặc các cơ sở GDNN." },
+                    { key: "b", text: "Phân luồng trong giáo dục giúp điều tiết cơ cấu ngành nghề của lực lượng lao động, phù hợp với yêu cầu phát triển kinh tế - xã hội của đất nước.", correct: true, note: "Đúng - Giúp cân bằng lực lượng lao động theo nhu cầu xã hội." },
+                    { key: "c", text: "Học sinh tốt nghiệp THCS có thể lựa chọn theo học nghề kĩ thuật, công nghệ ở trình độ sơ cấp hoặc trung cấp tại các cơ sở giáo dục nghề nghiệp.", correct: true, note: "Đúng - Học sinh có nhiều lựa chọn GDNN." },
+                    { key: "d", text: "Người theo học chương trình giáo dục thường xuyên cấp THPT không thể tiếp tục học lên các trình độ cao hơn như Cao đẳng hay Đại học.", correct: false, note: "Sai - Học GDTX vẫn có đầy đủ quyền lợi thi tuyển và học lên Cao đẳng, Đại học." }
+                ]
+            },
+            {
+                id: 18,
+                lesson: "Bài 3",
+                title: "Câu 18: Thị trường lao động kĩ thuật, công nghệ trong CMCN 4.0",
+                context: "Đoạn thông tin: Cuộc Cách mạng công nghiệp 4.0 làm xuất hiện nhiều ngành nghề mới như AI, Tự động hóa, Vi mạch bán dẫn. Doanh nghiệp đòi hỏi ứng viên có kĩ năng ngoại ngữ, tin học kĩ năng số và khả năng tự học.",
+                items: [
+                    { key: "a", text: "Thị trường lao động thuộc lĩnh vực kĩ thuật, công nghệ hiện nay đặt ra yêu cầu ngày càng cao đối với chất lượng nguồn nhân lực.", correct: true, note: "Đúng - Yêu cầu kiến thức chuyên môn và kĩ năng toàn diện." },
+                    { key: "b", text: "Sự phát triển mạnh mẽ của AI và tự động hóa sẽ làm tăng nhu cầu tuyển dụng đối với lao động phổ thông chưa qua đào tạo.", correct: false, note: "Sai - Tự động hóa làm giảm cầu lao động phổ thông, tăng cầu lao động kĩ thuật." },
+                    { key: "c", text: "Nắm bắt các xu hướng ngành nghề mới giúp học sinh có căn cứ chọn ngành học phù hợp với nhu cầu thực tế của xã hội.", correct: true, note: "Đúng - Giúp đón đầu xu hướng việc làm." },
+                    { key: "d", text: "Xu hướng tuyển dụng hiện nay ưu tiên người lao động có khả năng tự học, thành thạo ngoại ngữ và công nghệ thông tin.", correct: true, note: "Đúng - Kĩ năng số và tự học là tiêu chí cốt lõi." }
+                ]
+            },
+            {
+                id: 19,
+                lesson: "Bài 4",
+                title: "Câu 19: Quy trình lựa chọn nghề nghiệp & Mật mã Holland",
+                context: "Khi tìm hiểu và thực hiện quy trình lựa chọn nghề nghiệp trong lĩnh vực kĩ thuật, công nghệ:",
+                items: [
+                    { key: "a", text: "Theo lí thuyết mật mã Holland, người thuộc nhóm tính cách 'Kĩ thuật' (Thực tế) thường thích vận hành, điều khiển máy móc, thao tác khéo léo và suy nghĩ thực tế.", correct: true, note: "Đúng - Đây là đặc trưng nhóm Kĩ thuật (Realistic)." },
+                    { key: "b", text: "Bước đầu tiên trong quy trình lựa chọn nghề nghiệp 3 bước là tiến hành tìm hiểu nhu cầu tuyển dụng của thị trường lao động.", correct: false, note: "Sai - Bước 1 phải là 'Đánh giá bản thân'." },
+                    { key: "c", text: "Các yếu tố như định hướng gia đình, nhà trường, xu hướng xã hội và nhóm bạn bè thuộc nhóm các yếu tố khách quan ảnh hưởng đến việc chọn nghề.", correct: true, note: "Đúng - Đây là các yếu tố đến từ bên ngoài." },
+                    { key: "d", text: "Người có tính cách trầm tĩnh, tỉ mỉ, khả năng tập trung độc lập cao rất phù hợp với một số nghề kĩ thuật như lập trình viên, chuyên gia an ninh mạng.", correct: true, note: "Đúng - Đòi hỏi tính kiên trì, tập trung chi tiết." }
+                ]
+            },
+            {
+                id: 20,
+                lesson: "Bài 2",
+                title: "Câu 20: Ngành nghề kĩ thuật - công nghệ trong kỷ nguyên số",
+                context: "Các nhận định về ngành nghề kĩ thuật và công nghệ:",
+                items: [
+                    { key: "a", text: "Ngành kĩ thuật, công nghệ chỉ đòi hỏi sức khỏe thể chất tốt chứ không cần sáng tạo.", correct: false, note: "Sai - Đòi hỏi khả năng sáng tạo và giải quyết vấn đề." },
+                    { key: "b", text: "Sự phát triển của trí tuệ nhân tạo (AI) sẽ làm mất đi một số việc làm thủ công nhưng mở ra nhiều ngành nghề mới.", correct: true, note: "Đúng - Quá trình chuyển dịch công nghệ tạo cơ hội nghề nghiệp mới." },
+                    { key: "c", text: "Người làm việc trong lĩnh vực công nghệ cần có ý thức tuân thủ kỷ luật lao động và an toàn lao động.", correct: true, note: "Đúng - Phẩm chất bắt buộc đối với kĩ sư/kĩ thuật viên." },
+                    { key: "d", text: "Kĩ năng mềm như làm việc nhóm và giao tiếp không quan trọng đối với kĩ sư lập trình.", correct: false, note: "Sai - Kĩ năng làm việc nhóm là bắt buộc trong dự án phần mềm." }
+                ]
+            },
+            {
+                id: 21,
+                lesson: "Bài 3",
+                title: "Câu 21: Thực trạng và đặc điểm thị trường lao động Việt Nam",
+                context: "Phân tích về đặc điểm thị trường lao động:",
+                items: [
+                    { key: "a", text: "Thị trường lao động hiện nay đang thừa lao động có trình độ chuyên môn kĩ thuật cao và thiếu lao động phổ thông.", correct: false, note: "Sai - Thực tế là thừa lao động phổ thông, khan hiếm lao động kĩ thuật cao." },
+                    { key: "b", text: "Thị trường lao động cung cấp thông tin giúp học sinh lựa chọn ngành nghề đáp ứng nhu cầu thực tế của xã hội.", correct: true, note: "Đúng - Đảm bảo đầu ra việc làm bền vững." },
+                    { key: "c", text: "Các sự kiện hội chợ việc làm là một kênh thông tin chính thống giúp người lao động tìm hiểu nhu cầu tuyển dụng.", correct: true, note: "Đúng - Kênh thông tin trực tiếp và đáng tin cậy." },
+                    { key: "d", text: "Thu nhập của người lao động kĩ thuật phụ thuộc vào trình độ tay nghề, năng suất và đóng góp cho doanh nghiệp.", correct: true, note: "Đúng - Mức lương phản ánh năng lực và hiệu quả." }
+                ]
+            },
+            {
+                id: 22,
+                lesson: "Bài 4",
+                title: "Câu 22: Mô hình Holland & Triết lí Ikigai trong chọn nghề",
+                context: "Đánh giá các mô hình lý thuyết chọn nghề:",
+                items: [
+                    { key: "a", text: "Mật mã Holland giúp cá nhân nhận diện nhóm tính cách nổi trội để chọn môi trường làm việc phù hợp.", correct: true, note: "Đúng - Giúp đối chiếu tính cách với môi trường làm việc." },
+                    { key: "b", text: "Một lựa chọn nghề nghiệp tối ưu chỉ cần dựa vào sở thích cá nhân mà không cần quan tâm đến thị trường lao động.", correct: false, note: "Sai - Cần kết hợp cả năng lực và nhu cầu thị trường." },
+                    { key: "c", text: "Mô hình Ikigai khuyến khích con người tìm kiếm công việc đáp ứng cả 4 yếu tố: Thích, Giỏi, Xã hội cần, Kiếm ra tiền.", correct: true, note: "Đúng - Đây là điểm giao thoa Ikigai." },
+                    { key: "d", text: "Lập kế hoạch phát triển nghề nghiệp là một quá trình linh hoạt, có thể điều chỉnh theo từng giai đoạn phát triển.", correct: true, note: "Đúng - Cần thích ứng theo thời gian và sự thay đổi cá nhân." }
+                ]
+            }
+        ];
+
+        const essayData = [
+            {
+                id: "C1",
+                section: "Tự Luận Bài Học",
+                title: "Câu 1: Yêu cầu đối với người lao động trong lĩnh vực KT-CN (2.0 điểm)",
+                content: `**1. Năng lực (1.0 điểm):**
+- Có trình độ, kiến thức chuyên môn phù hợp.
+- Có năng lực sáng tạo, làm việc độc lập, làm việc nhóm.
+- Tự học nâng cao trình độ; vận dụng kiến thức vào thực tiễn.
+- Sức khỏe tốt...
+
+**2. Phẩm chất (1.0 điểm):**
+- Kiên trì, cẩn thận, tỉ mỉ.
+- Tin cậy, trách nhiệm, kỉ luật.
+- Tuân thủ quy trình, quy định.
+- Chăm chỉ, an toàn lao động...`
+            },
+            {
+                id: "C2",
+                section: "Tự Luận Bài Học",
+                title: "Câu 2: Phân tích biểu đồ Cơ cấu lao động giai đoạn 2018-2022 (1.0 điểm)",
+                content: `**a. Nhận xét xu hướng tỉ lệ lao động từng ngành (0.5 điểm):**
+- Lao động ngành **Nông, lâm nghiệp và thủy sản**: Giảm dần.
+- Lao động ngành **Công nghiệp chế biến, chế tạo và xây dựng**: Tăng đáng kể.
+- Lao động ngành **Dịch vụ lưu trú và ăn uống**: Tăng nhẹ.
+
+**b. Xu hướng chuyển dịch thị trường lao động (0.5 điểm):**
+- Lao động đang chuyển dịch từ nông nghiệp sang công nghiệp và dịch vụ, phản ánh quá trình công nghiệp hóa, hiện đại hóa nền kinh tế Việt Nam.`
+            },
+            {
+                id: "C3",
+                section: "Tự Luận Bài Học",
+                title: "Câu 3: Lý thuyết Mật mã Holland & Mô hình Lục giác (2.0 điểm)",
+                content: `**1. Tóm tắt lý thuyết (1.0 điểm):**
+- Là công cụ hỗ trợ cá nhân lựa chọn nghề nghiệp dựa trên đặc điểm, tính cách.
+- Nêu 6 kiểu người (6 nhóm tính cách): **Kĩ thuật** (Thực tế), **Nghiên cứu** (Điều tra), **Nghệ thuật** (Nghệ sĩ), **Xã hội** (Xã hội), **Quản lý** (Doanh nhân), **Nghiệp vụ** (Nguyên tắc).
+- Lựa chọn nghề phù hợp với tính cách sẽ đem lại hiệu quả trong công việc.
+
+**2. Giải thích sự bố trí các cạnh (0.5 điểm):**
+- Sáu kiểu người được sắp xếp trên 6 cạnh của hình lục giác.
+- Kiểu người ở cạnh càng xa nhau thì tính cách càng khác biệt.
+- Hai kiểu người ở 2 cạnh đối diện nhau có tính cách **đối lập nhau**.`
+            },
+            {
+                id: "C4",
+                section: "Tự Luận Bài Học",
+                title: "Câu 4: Lý do chọn nghề phù hợp năng lực, sở thích, tính cách (1.5 điểm)",
+                content: `- **Năng lực (0.5 điểm):** Giúp phát huy thế mạnh, dễ dàng phát triển và đạt được thành công trong công việc.
+- **Sở thích (0.5 điểm):** Tạo niềm vui, đam mê, giúp làm việc hiệu quả và gắn bó lâu dài.
+- **Tính cách (0.5 điểm):** Ảnh hưởng trực tiếp đến hiệu quả công việc, vì mỗi nghề nghiệp đòi hỏi đặc điểm tính cách riêng để đạt hiệu suất cao.`
+            },
+            {
+                id: "C5",
+                section: "Tự Luận Bài Học",
+                title: "Câu 5: Lý thuyết Cây nghề nghiệp & Triết lý Ikigai (2.0 điểm)",
+                content: `**1. Lý thuyết Cây nghề nghiệp (1.5 điểm):**
+- **Gốc rễ (4 yếu tố):** (1) Sở thích, (2) Khả năng, (3) Cá tính, (4) Giá trị nghề nghiệp.
+- **Quả (5 yếu tố):** (5) Môi trường làm việc tốt, (6) Cơ hội việc làm, (7) Lương cao, (8) Công việc ổn định, (9) Được nhiều người tôn trọng.
+- **Nguyên tắc:** Nên lựa chọn nghề nghiệp dựa trên các yếu tố thuộc **gốc rễ** thì cây mới ra quả ngọt (thành công).
+
+**2. Triết lí Ikigai (0.5 điểm):**
+- Chọn nghề dựa trên điểm giao thoa của 4 yếu tố: **Điều bạn thích** - **Điều bạn giỏi** - **Điều xã hội cần** - **Điều bạn được trả tiền**.`
+            },
+            {
+                id: "C6",
+                section: "Tự Luận Bài Học",
+                title: "Câu 6: Các bước thực hiện khi lựa chọn nghề nghiệp (0.5 điểm)",
+                content: `Khi lựa chọn nghề nghiệp cần thực hiện 3 bước:
+1. Đánh giá bản thân.
+2. Tìm hiểu thị trường lao động.
+3. Ra quyết định lựa chọn nghề nghiệp.`
+            },
+            {
+                id: "C7",
+                section: "Tự Luận Bài Học",
+                title: "Câu 7: Các yếu tố ảnh hưởng tới quyết định chọn nghề (0.5 điểm)",
+                content: `- **Yếu tố chủ quan (0.25 điểm):** Năng lực, sở thích, cá tính.
+- **Yếu tố khách quan (0.25 điểm):** Gia đình, bạn bè, nhà trường, xã hội.`
+            },
+            {
+                id: "C8",
+                section: "Tự Luận Bài Học",
+                title: "Câu 8: Tại sao cần quan tâm nhu cầu thị trường lao động? (1.5 điểm)",
+                content: `- Thị trường lao động luôn biến động, ảnh hưởng trực tiếp đến cơ hội việc làm. (0.5 đ)
+- Khoa học, công nghệ phát triển nhanh chóng làm thay đổi cơ cấu nhu cầu lao động. (0.5 đ)
+- Hiểu nhu cầu thị trường giúp chọn nghề phù hợp, tránh thất nghiệp, đảm bảo việc làm bền vững. (0.5 đ)`
+            },
+            {
+                id: "VD1",
+                section: "Câu Hỏi Vận Dụng",
+                title: "Vận dụng 1: Ưu điểm & Thách thức khi chọn GDNN - Trung cấp sau THCS",
+                content: `**1. Ưu điểm:**
+- Tiết kiệm thời gian (có bằng nghề ở tuổi 18).
+- Được thực hành nhiều, vững tay nghề sớm.
+- Được miễn/giảm học phí theo chính sách nhà nước.
+
+**2. Thách thức:**
+- Áp lực vừa học văn hóa vừa học nghề (Mô hình 9+).
+- Cần sự tự lập và định hướng rõ ràng từ sớm.
+
+**3. Lời khuyên:** Nếu có thiên hướng thực hành, muốn đi làm sớm hoặc điều kiện gia đình phù hợp, nên chọn GDNN. Nếu có khả năng học lý thuyết tốt và mong muốn theo đuổi các ngành học thuật/Đại học nghiên cứu, nên thi THPT.`
+            },
+            {
+                id: "VD2",
+                section: "Câu Hỏi Vận Dụng",
+                title: "Vận dụng 2: Phân tích bản thân theo Ikigai / Holland cho nghề KT-CN",
+                content: `**Ví dụ ngành: Kĩ sư Lập trình AI**
+- **Điều bạn thích (Sở thích/Holland - Investigative):** Thích tư duy logic, khám phá công nghệ mới, giải toán.
+- **Điều bạn giỏi (Năng lực):** Khả năng tự học tốt, tư duy thuật toán, kĩ năng tiếng Anh khá.
+- **Điều xã hội cần:** Xã hội đang thiếu hụt nguồn nhân lực AI chất lượng cao trong thời đại CMCN 4.0.
+- **Điều được trả tiền:** Ngành công nghệ có mức thu nhập cao và cơ hội phát triển rộng mở.`
+            }
+        ];
+
+        function App() {
+            const [tab, setTab] = useState("mcq"); // mcq, tf, essay, score
+            const [mcqAnswers, setMcqAnswers] = useState({});
+            const [tfAnswers, setTfAnswers] = useState({});
+            const [submitted, setSubmitted] = useState(false);
+
+            const handleMcqSelect = (qId, optionId) => {
+                if (submitted) return;
+                setMcqAnswers(prev => ({ ...prev, [qId]: optionId }));
+            };
+
+            const handleTfSelect = (qId, key, val) => {
+                if (submitted) return;
+                setTfAnswers(prev => ({
+                    ...prev,
+                    [qId]: { ...prev[qId], [key]: val }
+                }));
+            };
+
+            const calculateScore = () => {
+                let mcqCorrect = 0;
+                mcqData.forEach(q => {
+                    if (mcqAnswers[q.id] === q.correct) mcqCorrect++;
+                });
+
+                let tfTotalItems = 0;
+                let tfCorrectItems = 0;
+                tfData.forEach(q => {
+                    q.items.forEach(item => {
+                        tfTotalItems++;
+                        if (tfAnswers[q.id] && tfAnswers[q.id][item.key] === item.correct) {
+                            tfCorrectItems++;
+                        }
+                    });
+                });
+
+                return {
+                    mcqScore: (mcqCorrect * 0.25).toFixed(2),
+                    mcqCorrect,
+                    mcqTotal: mcqData.length,
+                    tfCorrectItems,
+                    tfTotalItems,
+                    tfScore: ((tfCorrectItems / tfTotalItems) * 3.0).toFixed(2),
+                    totalScore: ((mcqCorrect * 0.25) + ((tfCorrectItems / tfTotalItems) * 3.0)).toFixed(2)
+                };
+            };
+
+            const scores = calculateScore();
+
+            return (
+                <div className="min-h-screen flex flex-col justify-between">
+                    {/* Header */}
+                    <header className="bg-blue-700 text-white shadow-lg sticky top-0 z-50">
+                        <div className="max-w-5xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-blue-800 rounded-lg">
+                                    <i data-lucide="book-open" className="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h1 className="font-bold text-lg md:text-xl">Ôn Tập Giữa Kì 1 - Công Nghệ 9</h1>
+                                    <p className="text-xs text-blue-200">Trường THCS Nguyễn Hữu Thọ | Năm học 2026 - 2027</p>
+                                </div>
+                            </div>
+
+                            {/* Nav Buttons */}
+                            <div className="flex bg-blue-800 p-1 rounded-xl text-sm font-medium">
+                                <button
+                                    onClick={() => setTab("mcq")}
+                                    className={`px-3 py-1.5 rounded-lg transition ${tab === "mcq" ? "bg-white text-blue-700 shadow" : "text-blue-100 hover:text-white"}`}
+                                >
+                                    Phần I: Trắc Nghiệm ({mcqData.length} câu)
+                                </button>
+                                <button
+                                    onClick={() => setTab("tf")}
+                                    className={`px-3 py-1.5 rounded-lg transition ${tab === "tf" ? "bg-white text-blue-700 shadow" : "text-blue-100 hover:text-white"}`}
+                                >
+                                    Phần II: Đúng/Sai (6 câu)
+                                </button>
+                                <button
+                                    onClick={() => setTab("essay")}
+                                    className={`px-3 py-1.5 rounded-lg transition ${tab === "essay" ? "bg-white text-blue-700 shadow" : "text-blue-100 hover:text-white"}`}
+                                >
+                                    Tự Luận & Ôn Lý Thuyết
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Main Content */}
+                    <main className="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
+                        {/* Control & Submit Bar */}
+                        <div className="bg-white p-4 rounded-xl shadow-md border border-slate-200 mb-6 flex flex-wrap justify-between items-center gap-4">
+                            <div className="flex items-center gap-2 text-sm text-slate-600">
+                                <span className="font-semibold text-slate-800">Trạng thái:</span>
+                                {submitted ? (
+                                    <span className="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-medium">Đã Nộp Bài</span>
+                                ) : (
+                                    <span className="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-medium">Đang Làm Bài</span>
+                                )}
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                {submitted ? (
+                                    <button
+                                        onClick={() => { setSubmitted(false); setMcqAnswers({}); setTfAnswers({}); }}
+                                        className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg text-sm font-medium transition shadow"
+                                    >
+                                        Làm Lại Bài
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => setSubmitted(true)}
+                                        className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition shadow"
+                                    >
+                                        Nộp Bài & Xem Điểm
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Score Banner (when submitted) */}
+                        {submitted && (
+                            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-2xl shadow-xl mb-6">
+                                <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
+                                    <span>🎯 Kết Quả Ôn Tập</span>
+                                </h2>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                    <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+                                        <p className="text-xs text-blue-100 uppercase tracking-wider font-medium">Điểm Trắc Nghiệm (Phần I)</p>
+                                        <p className="text-2xl font-black mt-1">{scores.mcqScore} / 4.0 điểm</p>
+                                        <p className="text-xs text-blue-200 mt-1">Đúng {scores.mcqCorrect}/{scores.mcqTotal} câu</p>
+                                    </div>
+                                    <div className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+                                        <p className="text-xs text-blue-100 uppercase tracking-wider font-medium">Điểm Đúng/Sai (Phần II)</p>
+                                        <p className="text-2xl font-black mt-1">{scores.tfScore} / 3.0 điểm</p>
+                                        <p className="text-xs text-blue-200 mt-1">Đúng {scores.tfCorrectItems}/{scores.tfTotalItems} ý nhỏ</p>
+                                    </div>
+                                    <div className="bg-white/20 backdrop-blur-md p-4 rounded-xl border border-white/30">
+                                        <p className="text-xs text-blue-100 uppercase tracking-wider font-medium">Tổng Điểm Trắc Nghiệm</p>
+                                        <p className="text-3xl font-black text-amber-300 mt-1">{scores.totalScore} / 7.0 điểm</p>
+                                        <p className="text-xs text-blue-100 mt-1">Phần Tự luận 3.0đ học theo đáp án bên dưới</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* TAB 1: MCQ SECTION */}
+                        {tab === "mcq" && (
+                            <div className="space-y-6">
+                                <div className="border-l-4 border-blue-600 pl-3">
+                                    <h2 className="font-bold text-lg text-slate-900">PHẦN I. CÂU HỎI TRẮC NGHIỆM NHIỀU LỰA CHỌN</h2>
+                                    <p className="text-xs text-slate-500">Mỗi câu chọn 01 phương án đúng nhất (0.25 điểm/câu)</p>
+                                </div>
+
+                                {mcqData.map((q) => {
+                                    const userAns = mcqAnswers[q.id];
+                                    const isCorrect = userAns === q.correct;
+
+                                    return (
+                                        <div key={q.id} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3">
+                                            <div className="flex items-center justify-between gap-2">
+                                                <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md">
+                                                    {q.lesson} - Câu {q.id}
+                                                </span>
+                                                {submitted && (
+                                                    <span className={`text-xs font-bold px-2.5 py-1 rounded-md ${isCorrect ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>
+                                                        {isCorrect ? "Đúng (+0.25đ)" : userAns ? "Sai" : "Chưa chọn"}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <p className="font-semibold text-slate-800 text-base leading-relaxed">{q.question}</p>
+
+                                            <div className="grid grid-cols-1 gap-2 pt-2">
+                                                {q.options.map((opt) => {
+                                                    const isSelected = userAns === opt.id;
+                                                    let btnStyle = "bg-slate-50 border-slate-200 text-slate-700 hover:bg-blue-50/50 hover:border-blue-300";
+
+                                                    if (isSelected) {
+                                                        btnStyle = "bg-blue-600 text-white border-blue-600 font-medium shadow-sm";
+                                                    }
+
+                                                    if (submitted) {
+                                                        if (opt.id === q.correct) {
+                                                            btnStyle = "bg-emerald-600 text-white border-emerald-600 font-medium";
+                                                        } else if (isSelected && !isCorrect) {
+                                                            btnStyle = "bg-rose-600 text-white border-rose-600";
+                                                        } else {
+                                                            btnStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-60";
+                                                        }
+                                                    }
+
+                                                    return (
+                                                        <button
+                                                            key={opt.id}
+                                                            onClick={() => handleMcqSelect(q.id, opt.id)}
+                                                            className={`w-full text-left px-4 py-3 rounded-xl border transition flex items-start gap-3 ${btnStyle}`}
+                                                        >
+                                                            <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold shrink-0 ${isSelected ? "bg-white text-blue-700" : "bg-slate-200 text-slate-700"}`}>
+                                                                {opt.id}
+                                                            </span>
+                                                            <span className="text-sm pt-0.5">{opt.text}</span>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+
+                                            {submitted && (
+                                                <div className="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 space-y-1">
+                                                    <p className="font-semibold text-slate-800">Giải thích chi tiết:</p>
+                                                    <p>{q.rationale}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {/* TAB 2: TRUE / FALSE MATRIX */}
+                        {tab === "tf" && (
+                            <div className="space-y-6">
+                                <div className="border-l-4 border-indigo-600 pl-3">
+                                    <h2 className="font-bold text-lg text-slate-900">PHẦN II. CÂU HỎI TRẮC NGHIỆM ĐÚNG / SAI</h2>
+                                    <p className="text-xs text-slate-500">Mỗi câu gồm 4 nhận định a, b, c, d. Chọn Đúng (Đ) hoặc Sai (S)</p>
+                                </div>
+
+                                {tfData.map((q) => (
+                                    <div key={q.id} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md">
+                                                {q.lesson} - {q.title}
+                                            </span>
+                                        </div>
+
+                                        <p className="text-sm text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 italic">
+                                            {q.context}
+                                        </p>
+
+                                        <div className="space-y-3">
+                                            {q.items.map((item) => {
+                                                const currentVal = tfAnswers[q.id]?.[item.key];
+                                                const isItemCorrect = currentVal === item.correct;
+
+                                                return (
+                                                    <div key={item.key} className="p-3 border border-slate-200 rounded-xl bg-white space-y-2">
+                                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                                                            <p className="text-sm text-slate-800 flex-grow">
+                                                                <strong className="text-indigo-600 mr-1.5">{item.key})</strong>
+                                                                {item.text}
+                                                            </p>
+
+                                                            {/* Choice buttons */}
+                                                            <div className="flex items-center gap-2 shrink-0">
+                                                                <button
+                                                                    onClick={() => handleTfSelect(q.id, item.key, true)}
+                                                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
+                                                                        currentVal === true
+                                                                            ? "bg-emerald-600 text-white border-emerald-600"
+                                                                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-emerald-50"
+                                                                    } ${submitted && item.correct === true ? "ring-2 ring-emerald-500" : ""}`}
+                                                                >
+                                                                    Đúng (Đ)
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleTfSelect(q.id, item.key, false)}
+                                                                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
+                                                                        currentVal === false
+                                                                            ? "bg-rose-600 text-white border-rose-600"
+                                                                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-rose-50"
+                                                                    } ${submitted && item.correct === false ? "ring-2 ring-rose-500" : ""}`}
+                                                                >
+                                                                    Sai (S)
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        {submitted && (
+                                                            <div className="text-xs pt-1 border-t border-slate-100 flex items-center justify-between">
+                                                                <span className={isItemCorrect ? "text-emerald-600 font-semibold" : "text-rose-600 font-semibold"}>
+                                                                    {isItemCorrect ? "✓ Trả lời Đúng" : `✗ Chưa chính xác (Đáp án đúng: ${item.correct ? "Đúng" : "Sai"})`}
+                                                                </span>
+                                                                <span className="text-slate-500 italic">{item.note}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* TAB 3: ESSAY & THEORY REVIEW */}
+                        {tab === "essay" && (
+                            <div className="space-y-6">
+                                <div className="border-l-4 border-amber-500 pl-3">
+                                    <h2 className="font-bold text-lg text-slate-900">PHẦN TỰ LUẬN & ĐÁP ÁN ĐỀ CƯƠNG</h2>
+                                    <p className="text-xs text-slate-500">Nội dung lý thuyết chuẩn bị cho bài thi tự luận học kỳ</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-4">
+                                    {essayData.map((item) => (
+                                        <div key={item.id} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">
+                                                    {item.section} - {item.id}
+                                                </span>
+                                            </div>
+                                            <h3 className="font-bold text-slate-900 text-base">{item.title}</h3>
+                                            <div className="text-sm text-slate-700 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200 font-sans">
+                                                {item.content}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Footer */}
+                    <footer className="bg-slate-900 text-slate-400 py-4 text-center text-xs">
+                        <div className="max-w-5xl mx-auto px-4">
+                            <p>© 2026 THCS Nguyễn Hữu Thọ - Đề Cương Ôn Tập Giữa Kì 1 Công Nghệ 9</p>
+                            <p className="mt-1 text-slate-500">Giáo viên biên soạn: Đỗ Tấn Thạnh - Đoàn Thị Thủy Tiên</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
